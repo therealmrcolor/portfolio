@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio — Produzione Eventi dal Vivo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --stage-black: #14140F;
+      --stage-black-2: #1C1C15;
+      --paper: #EDE7D9;
+      --paper-2: #E4DCC8;
+      --amber: #E8A33D;
+      --amber-dim: #B87E2A;
+      --blueprint-dark: #16232E;
+      --blueprint-line: #DCE6ED;
+      --tape-red: #B8410F;
+      --cable-grey: #9A9584;
+      --ink: #1A1810;
+      --ink-soft: #4A473C;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Oswald', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--stage-black);
+      border-bottom: 1px solid rgba(232, 163, 61, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 6vw;
+    }
+
+    nav .name {
+      font-family: 'Oswald', sans-serif;
+      color: var(--paper);
+      font-size: 16px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    nav .name span {
+      color: var(--amber);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 28px;
+    }
+
+    nav a {
+      color: var(--cable-grey);
+      text-decoration: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--amber);
+    }
+
+    .hero {
+      background: radial-gradient(ellipse 900px 500px at 20% -10%, rgba(232, 163, 61, 0.16), transparent 60%), var(--stage-black);
+      color: var(--paper);
+      padding: 110px 6vw 90px;
+      border-bottom: 1px solid rgba(232, 163, 61, 0.2);
+    }
+
+    .hero .eyebrow {
+      color: var(--amber);
+      margin-bottom: 18px;
+      display: block;
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 6vw, 74px);
+      line-height: 1.03;
+      font-weight: 700;
+      max-width: 16ch;
+      margin-bottom: 26px;
+    }
+
+    .hero p {
+      color: var(--cable-grey);
+      font-size: 17px;
+      max-width: 52ch;
+      margin-bottom: 36px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag-chip {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--amber);
+      border: 1px solid rgba(232, 163, 61, 0.4);
+      padding: 6px 12px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .section {
+      padding: 80px 6vw;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 44px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(26px, 3vw, 36px);
+      font-weight: 600;
+    }
+
+    .section-head .eyebrow {
+      color: var(--tape-red);
+    }
+
+    .about-section p {
+      max-width: 64ch;
+      color: var(--ink-soft);
+      font-size: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      background: var(--paper-2);
+      border: 1px solid rgba(26, 24, 16, 0.12);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.25s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card .thumb {
+      aspect-ratio: 16/10;
+      background: repeating-linear-gradient(135deg, #DAD2BC, #DAD2BC 10px, #D2C9AF 10px, #D2C9AF 20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--ink-soft);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      padding: 12px;
+      border-bottom: 1px solid rgba(26, 24, 16, 0.12);
+      overflow: hidden;
+    }
+
+    .card .body {
+      padding: 20px 22px 24px;
+    }
+
+    .card .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--tape-red);
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    .card h3 {
+      font-size: 19px;
+      margin-bottom: 8px;
+      letter-spacing: 0.01em;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: var(--ink-soft);
+    }
+
+    .case-study {
+      background: var(--stage-black);
+      color: var(--paper);
+    }
+
+    .case-header {
+      padding: 80px 6vw 40px;
+      border-bottom: 1px solid rgba(237, 231, 217, 0.14);
+    }
+
+    .case-header .eyebrow {
+      color: var(--amber);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .case-header h2 {
+      font-size: clamp(30px, 4.5vw, 52px);
+      font-weight: 700;
+      margin-bottom: 20px;
+      max-width: 18ch;
+    }
+
+    .callsheet {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px 44px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--cable-grey);
+      border-top: 1px solid rgba(237, 231, 217, 0.14);
+      padding-top: 20px;
+      margin-top: 8px;
+    }
+
+    .callsheet div span {
+      display: block;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 10px;
+      color: var(--amber-dim);
+      margin-bottom: 4px;
+    }
+
+    .callsheet div strong {
+      color: var(--paper);
+      font-weight: 400;
+      font-size: 13px;
+    }
+
+    .cs-block {
+      padding: 56px 6vw;
+      border-bottom: 1px solid rgba(237, 231, 217, 0.10);
+    }
+
+    .cs-block .num {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--amber);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .cs-block h3 {
+      font-size: 22px;
+      margin-bottom: 18px;
+      font-weight: 600;
+      color: var(--paper);
+    }
+
+    .cs-block p {
+      color: var(--cable-grey);
+      font-size: 15.5px;
+      max-width: 62ch;
+      margin-bottom: 14px;
+    }
+
+    .cs-block p:last-child {
+      margin-bottom: 0;
+    }
+
+    .pull {
+      border-left: 2px solid var(--tape-red);
+      padding-left: 22px;
+      margin: 6px 0;
+    }
+
+    .pull p {
+      font-size: 19px;
+      color: var(--paper);
+      max-width: 44ch;
+    }
+
+    .schematic-wrap {
+      background: var(--blueprint-dark);
+      border: 1px solid rgba(220, 230, 237, 0.15);
+      padding: 30px 30px 22px;
+      overflow: hidden;
+    }
+
+    .schematic-wrap svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .schematic-wrap img {
+      aspect-ratio: 16/9;
+    }
+
+    .schematic-caption {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--blueprint-line);
+      opacity: 0.65;
+      margin-top: 16px;
+      letter-spacing: 0.03em;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 26px;
+    }
+
+    .placeholder {
+      aspect-ratio: 4/3;
+      border: 1px dashed rgba(237, 231, 217, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 16px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--cable-grey);
+    }
+
+    .gallery-item {
+      aspect-ratio: 4/3;
+      border: 1px solid rgba(237, 231, 217, 0.15);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .placeholder.video {
+      aspect-ratio: 16/9;
+      grid-column: 1/-1;
+    }
+
+    .result-strip {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      background: var(--stage-black-2);
+      padding: 40px 6vw;
+      border-bottom: 1px solid rgba(237, 231, 217, 0.10);
+    }
+
+    .result-strip .media-box {
+      flex: 1;
+      min-width: 280px;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+
+    .result-strip .result-text {
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .result-strip .result-text p {
+      color: var(--cable-grey);
+      font-size: 15px;
+    }
+
+    .result-strip video,
+    .result-strip iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    footer {
+      background: var(--stage-black);
+      color: var(--cable-grey);
+      padding: 56px 6vw 40px;
+      border-top: 1px solid rgba(232, 163, 61, 0.2);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    footer .eyebrow {
+      color: var(--amber);
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    footer a {
+      color: var(--paper);
+      text-decoration: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+    }
+
+    footer a:hover {
+      color: var(--amber);
+    }
+
+    @media (max-width:640px) {
+      nav ul {
+        gap: 16px;
+      }
+
+      .callsheet {
+        gap: 18px 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav id="nav-root"></nav>
+  <header class="hero" id="hero-root"></header>
+  <section class="section" id="lavori">
+    <div class="section-head">
+      <h2>Progetti selezionati</h2><span class="eyebrow">Archivio produzioni</span>
+    </div>
+    <div class="grid" id="grid-root"></div>
+  </section>
+  <section class="section about-section" id="chi-sono">
+    <div class="section-head">
+      <h2>Chi sono</h2><span class="eyebrow">Profilo</span>
+    </div>
+    <p id="about-text"></p>
+  </section>
+  <div id="case-studies-root"></div>
+  <footer id="footer-root"></footer>
+
+  <script>
+    /* ============================================================
+       COME MODIFICARE QUESTA PAGINA — leggi qui prima di tutto
+       ============================================================
+       Tutto quello che vedi sulla pagina (testi, progetti, immagini)
+       si trova nei due blocchi qui sotto: SITE_INFO e PROJECTS.
+       Non serve toccare altro codice nel file.
+    
+       1) TESTI GENERALI (nome, intro, chi sono, contatti)
+          -> modifica i valori dentro SITE_INFO.
+    
+       2) AGGIUNGERE UN PROGETTO
+          -> copia un intero blocco { ... } dentro l'array PROJECTS
+             (per esempio copia quello di "evt-02", che è già pronto
+             come modello), incollalo prima della parentesi quadra
+             finale "]" e cambia i valori con quelli del tuo evento.
+             Ogni progetto deve avere un "id" diverso dagli altri
+             (es: "evt-04"), usato come ancora del link nella griglia.
+    
+       3) AGGIUNGERE FOTO O VIDEO
+          -> crea una cartella chiamata "images" nella stessa cartella
+             dove si trova questo file .html, e mettici dentro le tue
+             foto/video.
+          -> poi scrivi il percorso nel campo giusto, per esempio:
+                copertina: "images/evt01-cover.jpg"
+             Se lasci il campo vuoto ("") la pagina mostra un riquadro
+             tratteggiato al posto dell'immagine, così sai cosa manca.
+          -> per i video del backstage o del risultato puoi anche
+             incollare un link di YouTube o Vimeo al posto del file,
+             verrà mostrato incorporato automaticamente.
+    
+       4) RIMUOVERE UN PROGETTO
+          -> cancella l'intero blocco { ... } corrispondente
+             dall'array PROJECTS.
+    
+       Non c'è altro da capire: il resto della pagina (menu, griglia,
+       pagina di dettaglio di ogni progetto) si costruisce da solo
+       leggendo questi dati.
+       ============================================================ */
+
+    const SITE_INFO = {
+      nome: "Nome Cognome",
+      tagNav: "eventi",
+      eyebrowHero: "Run of show",
+      titoloHero: "Produzione di eventi dal vivo",
+      testoHero: "Dalla regia audio-luci alle soluzioni tecniche fatte in casa: ogni evento è un problema da risolvere con quello che c'è, in tempo per il soundcheck. Qui il processo, non solo il risultato.",
+      chiSono: "Breve paragrafo su di te: da quanto tempo lavori su eventi dal vivo, che tipo di produzioni ti interessano, cosa stai cercando (stage, collaborazioni, primo lavoro). Sostituisci questo testo con la tua presentazione.",
+      email: "nome@email.com",
+      socialLabel: "Instagram / Vimeo / LinkedIn",
+      socialLink: "#"
+    };
+
+    const PROJECTS = [
+      {
+        id: "evt-01",
+        tag: "EVT-01",
+        titolo: "Dolly Bike",
+        sottotitoloCard: "Meeting di atletica leggera",
+        descrizioneBreve: "Un'inquadratura dinamica per seguire l'azione con un rig autocostruito.",
+        copertina: "img/copertina_dolly.png",
+        callsheet: {
+          evento: "Meeting di atletica leggera",
+          ruolo: "Regia video, ripresa",
+          budget: "0€",
+          prep: "Prototipo e test"
+        },
+        contesto: [
+          "Per un meeting di atletica leggera trasmesso in diretta streaming serviva un'inquadratura che seguisse i corridori lungo tutto il giro della pista, con un movimento fluido e stabile. Essendo un evento a budget zero, noleggiare un dolly professionale non era un'opzione. Allo stesso tempo, mi piaceva l'idea di affiancare alla telecamera fissa un'inquadratura dinamica che accompagnasse l'azione.",
+          "L'obiettivo era creare un sistema che si muovesse insieme agli atleti, seguendoli da vicino per tutta la gara.",
+          "L'idea era quella di avere qualcosa che si muovesse insieme all'azione e seguisse gli atletli da vicino."
+        ],
+        sfida: "Serviva una ripresa laterale, continua e stabile degli atleti, senza poter utilizzare un dolly. Inoltre, il mezzo doveva poter circolare sulla pista senza intralciare i corridori ed essere abbastanza semplice da guidare durante le riprese.",
+        soluzioneTesto: "Ho recuperato la city bike di mia mamma, che aveva già un portapacchi posteriore. Su quello ho costruito un supporto in legno progettato per ospitare e fissare il DJI Ronin sfruttando l'attacco a vite inferiore. Una volta montato, ho bloccato tutto con delle fascette per eliminare qualsiasi movimento indesiderato.<br><br>La fotocamera era collegata a un sistema Hollyland wireless che trasmetteva il segnale video direttamente alla regia. Per permettere al \"pilota\" di vedere l'inquadratura in tempo reale, ho montato sul manubrio un supporto con un iPad che mostrava il feed live della camera.",
+        schemaTipo: "disegno-evt01",
+        schemaImmagine: "",
+        schemaDidascalia: "Schizzo tecnico del montaggio: stabilizzatore al portapacchi, iPad al manubrio.",
+        backstage: [
+          { didascalia: "Fissaggio stabilizzatore", src: "img/dolly_1.png" },
+          { didascalia: "Fissaggio stabilizzatore", src: "img/dolly_3.png" },
+          { didascalia: "Test su pista", src: "img/dolly_2.png" }
+        ],
+        risultatoTesto: "Il risultato è stato sorprendente: la fluidità e la stabilizzazione erano paragonabili a quelle di un dolly professionale, con un vantaggio in più. A differenza di un dolly tradizionale, che normalmente viene posizionato solo lungo i rettilinei, questa soluzione permetteva di coprire l'intero anello della pista, seguendo gli atleti senza interruzioni per tutta la gara.",
+        risultatoMedia: "https://youtu.be/jrL0aFDr-MU?si=kYxOIEwtv5DWWIw7&t=14900"
+      },
+      {
+        id: "evt-02",
+        tag: "EVT-02",
+        titolo: "Diretta Spartan Race",
+        sottotitoloCard: "Gara in montagna",
+        descrizioneBreve: "Trasmissione live da un percorso nel bosco senza connessione internet.",
+        copertina: "",
+        callsheet: {
+          evento: "Gara tipo Spartan Race",
+          ruolo: "Regia video",
+          budget: "Basso",
+          prep: "Setup sul percorso"
+        },
+        contesto: [
+          "Si trattava di una gara ispirata alla Spartan Race, organizzata in una località di montagna completamente priva di copertura internet. L'obiettivo era trasmettere in diretta alcune prove distribuite lungo il percorso nel bosco sul ledwall presente nell'area di partenza, senza avere a disposizione attrezzature professionali."
+        ],
+        sfida: "La difficoltà principale era l'assenza totale di connessione dati, unita alla mancanza di budget per sistemi di trasmissione video professionali. Serviva quindi una soluzione affidabile, economica e facilmente trasportabile sul percorso di gara.",
+        soluzioneTesto: "Per risolvere il problema della connessione ho utilizzato uno Starlink alimentato da un generatore portatile da 1 kW. Per la trasmissione video, invece, ho impiegato diversi iPhone posizionati nei punti chiave del percorso, ciascuno collegato alla piattaforma web VDO.Ninja per inviare il proprio flusso video.<br><br>Tutti i segnali venivano poi raccolti in OBS, dove potevo gestire le diverse inquadrature e alternarle in tempo reale sul ledwall, mostrando al pubblico lo svolgimento delle prove direttamente dalla zona di partenza.",
+        schemaTipo: "immagine",
+        schemaImmagine: "",
+        schemaDidascalia: "",
+        backstage: [
+          { didascalia: "Setup Starlink", src: "" },
+          { didascalia: "iPhone in posizione", src: "" }
+        ],
+        risultatoTesto: "Il risultato è stato una diretta stabile e dall'aspetto professionale, capace di mostrare le prove sparse lungo il percorso come se fossero riprese da un sistema multicamera dedicato. Con una soluzione semplice e a basso costo è stato possibile offrire al pubblico un'esperienza molto più coinvolgente rispetto a una classica ripresa fissa.",
+        risultatoMedia: ""
+      },
+      {
+        id: "evt-03",
+        tag: "EVT-03",
+        titolo: "iPhone come webcam remote",
+        sottotitoloCard: "Meeting di atletica leggera",
+        descrizioneBreve: "Setup multicamera economico con iPhone per coprire tutte le gare.",
+        copertina: "",
+        callsheet: {
+          evento: "Meeting di atletica leggera",
+          ruolo: "Regia video",
+          budget: "Basso",
+          prep: "Configurazione rete"
+        },
+        contesto: [
+          "L'obiettivo era realizzare la diretta di un meeting di atletica leggera coprendo sia le gare su pista sia le diverse prove in campo, avendo a disposizione una sola telecamera con ottica zoom e alcuni iPhone."
+        ],
+        sfida: "Con una sola telecamera era impossibile seguire contemporaneamente le gare su pista, il salto in alto, il salto in lungo, il salto con l'asta e i lanci. Serviva quindi una soluzione che aumentasse il numero di punti di ripresa senza ricorrere ad attrezzature professionali.",
+        soluzioneTesto: "Ho creato una rete locale estesa a tutte le aree della pista e ho posizionato un iPhone in corrispondenza delle diverse prove. Utilizzando VDO.Ninja e la funzione Continuity Camera di Apple, ogni iPhone trasmetteva il proprio flusso video direttamente alla regia.<br><br>In OBS potevo gestire tutte le sorgenti contemporaneamente, alternando le inquadrature in base allo svolgimento delle gare e offrendo una copertura molto più completa dell'evento.",
+        schemaTipo: "immagine",
+        schemaImmagine: "",
+        schemaDidascalia: "",
+        backstage: [
+          { didascalia: "Setup iPhone", src: "" },
+          { didascalia: "Regia con OBS", src: "" }
+        ],
+        risultatoTesto: "Oltre alla classica inquadratura panoramica con la telecamera zoom, sono riuscito ad aggiungere una serie di camere dedicate alle diverse discipline presenti sulla pista. Questo ha permesso di coprire anche i momenti in cui non erano in corso gare su pista, mostrando al pubblico le prove in campo senza interruzioni.<br><br>Uno dei principali vantaggi di questa soluzione è la flessibilità: gli iPhone possono essere spostati rapidamente ovunque sia disponibile la copertura della rete locale, adattando il setup alle esigenze di ogni evento.",
+        risultatoMedia: ""
+      }
+    ];
+
+    /* ============================================================
+       Da qui in giù è solo codice che legge i dati sopra e
+       costruisce la pagina. Non serve modificarlo.
+       ============================================================ */
+
+    function mediaEmbed(src, aspectClassEl) {
+      if (!src) return null;
+      const isYoutube = /youtube\.com|youtu\.be/.test(src);
+      const isVimeo = /vimeo\.com/.test(src);
+      if (isYoutube || isVimeo) {
+        let embedUrl = src;
+        if (isYoutube) {
+          const idMatch = src.match(/(?:v=|youtu\.be\/)([\w-]+)/);
+          if (idMatch) {
+            embedUrl = "https://www.youtube.com/embed/" + idMatch[1];
+            const timeMatch = src.match(/[?&](?:t|start)=([^&]+)/);
+            if (timeMatch) {
+              embedUrl += "?start=" + parseInt(timeMatch[1], 10);
+            }
+          }
+        } else if (isVimeo) {
+          const idMatch = src.match(/vimeo\.com\/(\d+)/);
+          if (idMatch) embedUrl = "https://player.vimeo.com/video/" + idMatch[1];
+        }
+        return `<iframe src="${embedUrl}" allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+      }
+      if (/\.(mp4|webm|mov)$/i.test(src)) {
+        return `<video src="${src}" controls></video>`;
+      }
+      return `<img src="${src}" alt="">`;
+    }
+
+    function renderNav() {
+      document.getElementById("nav-root").innerHTML = `
+    <div class="name">${SITE_INFO.nome} <span>/ ${SITE_INFO.tagNav}</span></div>
+    <ul>
+      <li><a href="#lavori">Lavori</a></li>
+      <li><a href="#chi-sono">Chi sono</a></li>
+      <li><a href="#contatti">Contatti</a></li>
+    </ul>`;
+    }
+
+    function renderHero() {
+      const chips = PROJECTS.map(p => `<a class="tag-chip" href="#${p.id}">${p.tag} — ${p.titolo}</a>`).join("");
+      document.getElementById("hero-root").innerHTML = `
+    <span class="eyebrow">${SITE_INFO.eyebrowHero}</span>
+    <h1>${SITE_INFO.titoloHero}</h1>
+    <p>${SITE_INFO.testoHero}</p>
+    <div class="tag-row">${chips}</div>`;
+    }
+
+    function renderAbout() {
+      document.getElementById("about-text").textContent = SITE_INFO.chiSono;
+    }
+
+    function renderGrid() {
+      document.getElementById("grid-root").innerHTML = PROJECTS.map(p => `
+    <a class="card" href="#${p.id}">
+      <div class="thumb">${p.copertina ? `<img src="${p.copertina}" alt="${p.titolo}">` : `FOTO DI COPERTINA<br>${p.titolo}`}</div>
+      <div class="body">
+        <div class="meta">${p.tag} · ${p.sottotitoloCard}</div>
+        <h3>${p.titolo}</h3>
+        <p>${p.descrizioneBreve}</p>
+      </div>
+    </a>`).join("");
+    }
+
+    function schematicSvgEvt01() {
+      return `
+    <svg viewBox="0 0 900 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schema tecnico del rig: bicicletta con stabilizzatore e fotocamera">
+      <title>Schema del rig bici-dolly</title>
+      <desc>Disegno tecnico che mostra una bicicletta con uno stabilizzatore fissato al manubrio, una fotocamera montata sopra, e le annotazioni delle parti principali.</desc>
+      <g fill="none" stroke="#DCE6ED" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.92">
+        <circle cx="230" cy="330" r="70"/><circle cx="590" cy="330" r="70"/>
+        <circle cx="230" cy="330" r="6" fill="#DCE6ED" stroke="none"/><circle cx="590" cy="330" r="6" fill="#DCE6ED" stroke="none"/>
+        <path d="M230 330 L 400 200 L 590 330"/><path d="M400 200 L 400 130"/><path d="M230 330 L 470 330"/>
+        <path d="M400 130 L 470 200 L 590 330"/><path d="M400 130 L 340 130"/><path d="M340 100 L 340 160"/>
+      </g>
+      <g stroke="#E8A33D" stroke-width="2.4" fill="none" stroke-linecap="round">
+        <rect x="300" y="70" width="88" height="34" rx="2" transform="rotate(-8 344 87)"/>
+        <line x1="335" y1="100" x2="325" y2="130" transform="rotate(-8 330 115)"/>
+      </g>
+      <g fill="none" stroke="#E8A33D" stroke-width="2.2"><rect x="318" y="30" width="54" height="34" rx="3"/><circle cx="345" cy="47" r="11"/></g>
+      <line x1="345" y1="64" x2="340" y2="88" stroke="#E8A33D" stroke-width="2.2"/>
+      <g font-family="IBM Plex Mono, monospace" font-size="12" fill="#DCE6ED">
+        <line x1="345" y1="47" x2="470" y2="47" stroke="#DCE6ED" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/><text x="478" y="51">Fotocamera</text>
+        <line x1="335" y1="105" x2="470" y2="105" stroke="#DCE6ED" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/><text x="478" y="109">Stabilizzatore, fissato al manubrio</text>
+        <line x1="400" y1="130" x2="470" y2="160" stroke="#DCE6ED" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/><text x="478" y="164">Telaio bicicletta</text>
+        <line x1="410" y1="265" x2="470" y2="230" stroke="#DCE6ED" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/><text x="478" y="234">Traiettoria lungo l'anello pista</text>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="11" fill="#8FA6B8" opacity="0.8">
+        <text x="60" y="420">Vista laterale — non in scala</text><text x="740" y="420" text-anchor="end">Rig EVT-01</text>
+      </g>
+    </svg>`;
+    }
+
+    function renderSchematic(p) {
+      if (p.schemaTipo === "disegno-evt01") return schematicSvgEvt01();
+      if (p.schemaImmagine) return `<img src="${p.schemaImmagine}" alt="">`;
+      return `<div class="placeholder" style="aspect-ratio:16/9;">Aggiungi qui uno schema, un disegno o una foto della soluzione tecnica (campo schemaImmagine)</div>`;
+    }
+
+    function renderCaseStudies() {
+      document.getElementById("case-studies-root").innerHTML = PROJECTS.map(p => `
+    <article class="case-study" id="${p.id}">
+      <div class="case-header">
+        <span class="eyebrow">Caso studio · ${p.tag}</span>
+        <h2>${p.titolo}</h2>
+        <div class="callsheet">
+          <div><span>Evento</span><strong>${p.callsheet.evento}</strong></div>
+          <div><span>Ruolo</span><strong>${p.callsheet.ruolo}</strong></div>
+          <div><span>Budget attrezzatura</span><strong>${p.callsheet.budget}</strong></div>
+          <div><span>Durata prep</span><strong>${p.callsheet.prep}</strong></div>
+        </div>
+      </div>
+
+      <div class="cs-block">
+        <span class="num">01 — Contesto</span>
+        <h3>Il problema</h3>
+        ${p.contesto.map(par => `<p>${par}</p>`).join("")}
+      </div>
+
+      <div class="cs-block">
+        <span class="num">02 — La sfida</span>
+        <div class="pull"><p>${p.sfida}</p></div>
+      </div>
+
+      <div class="cs-block">
+        <span class="num">03 — La soluzione</span>
+        <h3>Come l'ho realizzata</h3>
+        <p>${p.soluzioneTesto}</p>
+        <div class="schematic-wrap">
+          ${renderSchematic(p)}
+          <div class="schematic-caption">${p.schemaDidascalia}</div>
+        </div>
+      </div>
+
+      <div class="cs-block">
+        <span class="num">04 — Dietro le quinte</span>
+        <h3>Il montaggio e i test</h3>
+        <div class="gallery">
+          ${p.backstage.map(b => b.src
+        ? `<div class="gallery-item">${mediaEmbed(b.src)}</div>`
+        : `<div class="placeholder">${b.didascalia}</div>`
+      ).join("")}
+        </div>
+      </div>
+
+      <div class="result-strip">
+        <div class="media-box">${p.risultatoMedia ? mediaEmbed(p.risultatoMedia) : `<div class="placeholder video" style="aspect-ratio:16/9; width:100%; height:100%;">Video o foto del risultato finale (campo risultatoMedia)</div>`}</div>
+        <div class="result-text">
+          <span class="num">05 — Il risultato</span>
+          <p>${p.risultatoTesto}</p>
+        </div>
+      </div>
+    </article>`).join("");
+    }
+
+    function renderFooter() {
+      document.getElementById("footer-root").innerHTML = `
+    <div><span class="eyebrow">Contatti</span><a href="mailto:${SITE_INFO.email}">${SITE_INFO.email}</a></div>
+    <div><span class="eyebrow">Altrove</span><a href="${SITE_INFO.socialLink}">${SITE_INFO.socialLabel}</a></div>`;
+    }
+
+    renderNav();
+    renderHero();
+    renderAbout();
+    renderGrid();
+    renderCaseStudies();
+    renderFooter();
+  </script>
+</body>
+
+</html>
