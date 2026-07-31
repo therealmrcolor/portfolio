@@ -624,7 +624,7 @@
           { didascalia: "Regia con OBS", src: "img/spartan/spartan_8.png" }
         ],
         risultatoTesto: "Il risultato è stato una diretta stabile e dall'aspetto professionale, capace di mostrare le prove sparse lungo il percorso come se fossero riprese da un sistema multicamera dedicato. Con una soluzione semplice e a basso costo è stato possibile offrire al pubblico un'esperienza molto più coinvolgente rispetto a una classica ripresa fissa.",
-        risultatoMedia: ""
+        risultatoMedia: "img/spartan/spartan_copertina.png"
       },
       {
         id: "evt-03",
@@ -674,7 +674,7 @@
       if (isYoutube || isVimeo) {
         let embedUrl = src;
         if (isYoutube) {
-          const idMatch = src.match(/(?:v=|youtu\.be\/)([\w-]+)/);
+          const idMatch = src.match(/(?:v=|youtu\.be\/|\/live\/|\/embed\/)([\w-]+)/);
           if (idMatch) {
             embedUrl = "https://www.youtube.com/embed/" + idMatch[1];
             const timeMatch = src.match(/[?&](?:t|start)=([^&]+)/);
@@ -699,7 +699,7 @@
     <div class="name">${SITE_INFO.nome} <span>/ ${SITE_INFO.tagNav}</span></div>
     <ul>
       <li><a href="#lavori">Lavori</a></li>
-      <li><a href="#contatti">Contatti</a></li>
+
     </ul>`;
     }
 
@@ -770,7 +770,7 @@
           <div><span>Evento</span><strong>${p.callsheet.evento}</strong></div>
           <div><span>Ruolo</span><strong>${p.callsheet.ruolo}</strong></div>
           <div><span>Budget attrezzatura</span><strong>${p.callsheet.budget}</strong></div>
-          <div><span>Durata prep</span><strong>${p.callsheet.prep}</strong></div>
+
         </div>
       </div>
 
