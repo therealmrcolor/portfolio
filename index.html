@@ -330,7 +330,7 @@
     .cs-block p {
       color: var(--cable-grey);
       font-size: 15.5px;
-      max-width: 62ch;
+      max-width: 100%;
       margin-bottom: 14px;
     }
 
@@ -347,7 +347,7 @@
     .pull p {
       font-size: 19px;
       color: var(--paper);
-      max-width: 44ch;
+      max-width: 100%;
     }
 
     .schematic-wrap {
@@ -364,7 +364,9 @@
     }
 
     .schematic-wrap img {
-      aspect-ratio: 16/9;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
     }
 
     .schematic-caption {
@@ -378,7 +380,7 @@
 
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
       margin-top: 26px;
     }
@@ -399,8 +401,13 @@
     .gallery-item {
       aspect-ratio: 4/3;
       border: 1px solid rgba(237, 231, 217, 0.15);
-      overflow: hidden;
       position: relative;
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     .placeholder.video {
@@ -479,6 +486,10 @@
       .callsheet {
         gap: 18px 28px;
       }
+
+      .gallery {
+        grid-template-columns: repeat(1, 1fr);
+      }
     }
   </style>
 </head>
@@ -493,12 +504,7 @@
     </div>
     <div class="grid" id="grid-root"></div>
   </section>
-  <section class="section about-section" id="chi-sono">
-    <div class="section-head">
-      <h2>Chi sono</h2><span class="eyebrow">Profilo</span>
-    </div>
-    <p id="about-text"></p>
-  </section>
+
   <div id="case-studies-root"></div>
   <footer id="footer-root"></footer>
 
@@ -546,8 +552,8 @@
       nome: "BALDI",
       tagNav: "eventi",
       eyebrowHero: "Run of show",
-      titoloHero: "Produzione di eventi dal vivo",
-      testoHero: "Dalla regia audio-luci alle soluzioni tecniche fatte in casa: ogni evento è un problema da risolvere con quello che c'è, in tempo per il soundcheck. Qui il processo, non solo il risultato.",
+      titoloHero: "Le mie produzioni di eventi dal vivo",
+      testoHero: "",
       chiSono: "Breve paragrafo su di te: da quanto tempo lavori su eventi dal vivo, che tipo di produzioni ti interessano, cosa stai cercando (stage, collaborazioni, primo lavoro). Sostituisci questo testo con la tua presentazione.",
       email: "luca.baldissarutti@gmail.com",
       socialLabel: "Instagram / Vimeo / LinkedIn",
@@ -575,8 +581,8 @@
         ],
         sfida: "Serviva una ripresa laterale, continua e stabile degli atleti, senza poter utilizzare un dolly. Inoltre, il mezzo doveva poter circolare sulla pista senza intralciare i corridori ed essere abbastanza semplice da guidare durante le riprese.",
         soluzioneTesto: "Ho recuperato la city bike di mia mamma, che aveva già un portapacchi posteriore. Su quello ho costruito un supporto in legno progettato per ospitare e fissare il DJI Ronin sfruttando l'attacco a vite inferiore. Una volta montato, ho bloccato tutto con delle fascette per eliminare qualsiasi movimento indesiderato.<br><br>La fotocamera era collegata a un sistema Hollyland wireless che trasmetteva il segnale video direttamente alla regia. Per permettere al \"pilota\" di vedere l'inquadratura in tempo reale, ho montato sul manubrio un supporto con un iPad che mostrava il feed live della camera.",
-        schemaTipo: "disegno-evt01",
-        schemaImmagine: "",
+        schemaTipo: "immagine",
+        schemaImmagine: "img/dolly/dolly_progetto.png",
         schemaDidascalia: "Schizzo tecnico del montaggio: stabilizzatore al portapacchi, iPad al manubrio.",
         backstage: [
           { didascalia: "Fissaggio stabilizzatore", src: "img/dolly/dolly_1.png" },
@@ -592,7 +598,7 @@
         titolo: "Diretta Spartan Race",
         sottotitoloCard: "Gara in montagna",
         descrizioneBreve: "Trasmissione live da un percorso nel bosco senza connessione internet.",
-        copertina: "",
+        copertina: "img/spartan/spartan_copertina.png",
         callsheet: {
           evento: "Gara tipo Spartan Race",
           ruolo: "Regia video",
@@ -605,12 +611,17 @@
         sfida: "La difficoltà principale era l'assenza totale di connessione dati, unita alla mancanza di budget per sistemi di trasmissione video professionali. Serviva quindi una soluzione affidabile, economica e facilmente trasportabile sul percorso di gara.",
         soluzioneTesto: "Per risolvere il problema della connessione ho utilizzato uno Starlink alimentato da un generatore portatile da 1 kW. Per la trasmissione video, invece, ho impiegato diversi iPhone posizionati nei punti chiave del percorso, ciascuno collegato alla piattaforma web VDO.Ninja per inviare il proprio flusso video.<br><br>Tutti i segnali venivano poi raccolti in OBS, dove potevo gestire le diverse inquadrature e alternarle in tempo reale sul ledwall, mostrando al pubblico lo svolgimento delle prove direttamente dalla zona di partenza.",
         schemaTipo: "immagine",
-        schemaImmagine: "",
+        schemaImmagine: "img/spartan/spartan_progetto.jpeg",
         schemaDidascalia: "",
         backstage: [
           { didascalia: "Setup iPhone", src: "img/spartan/spartan_1.png" },
           { didascalia: "Setup iPhone", src: "img/spartan/spartan_2.png" },
-          { didascalia: "Regia con OBS", src: "img/spartan/spartan_3.png" }
+          { didascalia: "Regia con OBS", src: "img/spartan/spartan_3.png" },
+          { didascalia: "Regia con OBS", src: "img/spartan/spartan_4.png" },
+          { didascalia: "Regia con OBS", src: "img/spartan/spartan_5.png" },
+          { didascalia: "Regia con OBS", src: "img/spartan/spartan_6.png" },
+          { didascalia: "Regia con OBS", src: "img/spartan/spartan_7.png" },
+          { didascalia: "Regia con OBS", src: "img/spartan/spartan_8.png" }
         ],
         risultatoTesto: "Il risultato è stato una diretta stabile e dall'aspetto professionale, capace di mostrare le prove sparse lungo il percorso come se fossero riprese da un sistema multicamera dedicato. Con una soluzione semplice e a basso costo è stato possibile offrire al pubblico un'esperienza molto più coinvolgente rispetto a una classica ripresa fissa.",
         risultatoMedia: ""
@@ -621,7 +632,7 @@
         titolo: "iPhone come webcam remote",
         sottotitoloCard: "Meeting di atletica leggera",
         descrizioneBreve: "Setup multicamera economico con iPhone per coprire tutte le gare.",
-        copertina: "img/diretta_cds/diretta.png",
+        copertina: "img/diretta_cds/diretta_copertina.png",
         callsheet: {
           evento: "Meeting di atletica leggera",
           ruolo: "Regia video",
@@ -634,16 +645,20 @@
         sfida: "Con una sola telecamera era impossibile seguire contemporaneamente le gare su pista, il salto in alto, il salto in lungo, il salto con l'asta e i lanci. Serviva quindi una soluzione che aumentasse il numero di punti di ripresa senza ricorrere ad attrezzature professionali.",
         soluzioneTesto: "Ho creato una rete locale estesa a tutte le aree della pista e ho posizionato un iPhone in corrispondenza delle diverse prove. Utilizzando VDO.Ninja e la funzione Continuity Camera di Apple, ogni iPhone trasmetteva il proprio flusso video direttamente alla regia.<br><br>In OBS potevo gestire tutte le sorgenti contemporaneamente, alternando le inquadrature in base allo svolgimento delle gare e offrendo una copertura molto più completa dell'evento.",
         schemaTipo: "immagine",
-        schemaImmagine: "",
+        schemaImmagine: "img/diretta_cds/diretta_progetto.png",
         schemaDidascalia: "",
         backstage: [
           { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_1.png" },
           { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_2.png" },
           { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_3.png" },
-          { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_4.png" }
+          { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_4.png" },
+          { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_5.png" },
+          { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_6.png" },
+          { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_7.png" }
+
         ],
         risultatoTesto: "Oltre alla classica inquadratura panoramica con la telecamera zoom, sono riuscito ad aggiungere una serie di camere dedicate alle diverse discipline presenti sulla pista. Questo ha permesso di coprire anche i momenti in cui non erano in corso gare su pista, mostrando al pubblico le prove in campo senza interruzioni.<br><br>Uno dei principali vantaggi di questa soluzione è la flessibilità: gli iPhone possono essere spostati rapidamente ovunque sia disponibile la copertura della rete locale, adattando il setup alle esigenze di ogni evento.",
-        risultatoMedia: ""
+        risultatoMedia: "https://www.youtube.com/live/pMplrXIDuHw?si=TrYu60nVBcrO_loz&t=6377"
       }
     ];
 
@@ -684,7 +699,6 @@
     <div class="name">${SITE_INFO.nome} <span>/ ${SITE_INFO.tagNav}</span></div>
     <ul>
       <li><a href="#lavori">Lavori</a></li>
-      <li><a href="#chi-sono">Chi sono</a></li>
       <li><a href="#contatti">Contatti</a></li>
     </ul>`;
     }
@@ -696,10 +710,6 @@
     <h1>${SITE_INFO.titoloHero}</h1>
     <p>${SITE_INFO.testoHero}</p>
     <div class="tag-row">${chips}</div>`;
-    }
-
-    function renderAbout() {
-      document.getElementById("about-text").textContent = SITE_INFO.chiSono;
     }
 
     function renderGrid() {
@@ -755,6 +765,7 @@
       <div class="case-header">
         <span class="eyebrow">Caso studio · ${p.tag}</span>
         <h2>${p.titolo}</h2>
+        ${p.copertina ? `<div style="margin-bottom: 40px; border: 1px solid rgba(237, 231, 217, 0.15);"><img src="${p.copertina}" style="width: 100%; height: auto; display: block;" alt=""></div>` : ""}
         <div class="callsheet">
           <div><span>Evento</span><strong>${p.callsheet.evento}</strong></div>
           <div><span>Ruolo</span><strong>${p.callsheet.ruolo}</strong></div>
@@ -813,7 +824,6 @@
 
     renderNav();
     renderHero();
-    renderAbout();
     renderGrid();
     renderCaseStudies();
     renderFooter();
