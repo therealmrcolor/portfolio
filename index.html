@@ -491,6 +491,36 @@
         grid-template-columns: repeat(1, 1fr);
       }
     }
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(20, 20, 15, 0.95);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      cursor: zoom-out;
+    }
+
+    .lightbox img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    }
+
+    .gallery-item img, .schematic-wrap img {
+      cursor: zoom-in;
+      transition: opacity 0.2s;
+    }
+
+    .gallery-item img:hover, .schematic-wrap img:hover {
+      opacity: 0.85;
+    }
   </style>
 </head>
 
@@ -659,6 +689,37 @@
         ],
         risultatoTesto: "Oltre alla classica inquadratura panoramica con la telecamera zoom, sono riuscito ad aggiungere una serie di camere dedicate alle diverse discipline presenti sulla pista. Questo ha permesso di coprire anche i momenti in cui non erano in corso gare su pista, mostrando al pubblico le prove in campo senza interruzioni.<br><br>Uno dei principali vantaggi di questa soluzione è la flessibilità: gli iPhone possono essere spostati rapidamente ovunque sia disponibile la copertura della rete locale, adattando il setup alle esigenze di ogni evento.",
         risultatoMedia: "https://www.youtube.com/live/pMplrXIDuHw?si=TrYu60nVBcrO_loz&t=6377"
+      },
+      {
+        id: "evt-04",
+        tag: "EVT-04",
+        titolo: "Grafiche diretta",
+        sottotitoloCard: "Meeting di atletica leggera",
+        descrizioneBreve: "Sistema per l'elaborazione e la messa in onda di grafiche broadcast in tempo reale.",
+        copertina: "img/grafiche/grafica_copertina.png",
+        callsheet: {
+          evento: "Meeting di atletica leggera",
+          ruolo: "Sviluppo tool, Regia",
+          budget: "Basso",
+          prep: "Sviluppo template HTML"
+        },
+        contesto: [
+          "Per la diretta streaming di un meeting di atletica leggera volevo trasmettere a schermo le starting list e i risultati delle varie gare con un look televisivo curato, del tutto simile a quello dei grandi eventi internazionali come Olimpiadi e Mondiali. I dati ufficiali erano pubblicati sul sito della FIDAL in una pagina aggiornata continuamente, ma non esisteva un sistema di esportazione diretta né un’integrazione automatica per i software di regia."
+        ],
+        sfida: "L’unico modo per estrarre le informazioni era copiare manualmente le tabelle dal sito. Il problema principale era la gestione del tempo in diretta: serviva un metodo immediato per elaborare quel testo grezzo, correggere al volo l'impaginazione e generare grafiche broadcast senza ritardare la messa in onda tra una serie e l'altra.",
+        soluzioneTesto: "Ho sviluppato un tool di regia dedicato che permette di organizzare il palinsesto dell'evento diviso per categorie, gare e serie (es. \"3000m F\", \"5000m Uomini\"). Il tool consente di incollare direttamente i dati della tabella FIDAL, formattarli istantaneamente con un'anteprima in tempo reale.<br><br>Sul fronte grafico ho creato un template HTML personalizzato caricato dentro OBS tramite sorgente browser. Attraverso l'interfaccia dell'applicazione potevo così controllare i comandi di regia (\"Aggiorna Dati\", \"Manda in Onda\", \"Togli Grafica\") per trasmettere istantaneamente le starting list aggiornate prima di ogni gara.",
+        schemaTipo: "immagine",
+        schemaImmagine: "img/grafiche/grafica_progetto.png",
+        schemaDidascalia: "",
+        backstage: [
+          { didascalia: "Grafica", src: "img/grafiche/grafica_1.png" },
+          { didascalia: "Grafica", src: "img/grafiche/grafica_2.png" },
+          { didascalia: "Grafica", src: "img/grafiche/grafica_3.png" },
+          { didascalia: "Grafica", src: "img/grafiche/grafica_4.png" },
+          { didascalia: "Grafica copertina", src: "img/grafiche/grafica_copertina.png" }
+        ],
+        risultatoTesto: "Il risultato finale è stato un overlay grafico estremamente pulito e dall'aspetto professionale, del tutto paragonabile alle grafiche ufficiali dei Mondiali o delle Olimpiadi.",
+        risultatoMedia: "img/grafiche/grafica_copertina.png"
       }
     ];
 
@@ -691,7 +752,7 @@
       if (/\.(mp4|webm|mov)$/i.test(src)) {
         return `<video src="${src}" controls></video>`;
       }
-      return `<img src="${src}" alt="">`;
+      return `<img src="${src}" alt="" onclick="openLightbox('${src}')">`;
     }
 
     function renderNav() {
@@ -755,7 +816,7 @@
 
     function renderSchematic(p) {
       if (p.schemaTipo === "disegno-evt01") return schematicSvgEvt01();
-      if (p.schemaImmagine) return `<img src="${p.schemaImmagine}" alt="">`;
+      if (p.schemaImmagine) return `<img src="${p.schemaImmagine}" alt="" onclick="openLightbox('${p.schemaImmagine}')">`;
       return `<div class="placeholder" style="aspect-ratio:16/9;">Aggiungi qui uno schema, un disegno o una foto della soluzione tecnica (campo schemaImmagine)</div>`;
     }
 
@@ -827,7 +888,16 @@
     renderGrid();
     renderCaseStudies();
     renderFooter();
+
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').style.display = 'flex';
+    }
   </script>
+
+  <div id="lightbox" class="lightbox" onclick="this.style.display='none'">
+    <img id="lightbox-img" src="" alt="">
+  </div>
 </body>
 
 </html>
