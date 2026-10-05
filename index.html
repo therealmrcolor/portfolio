@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portfolio — Produzione Eventi dal Vivo</title>
+  <meta name="description" content="Live event production portfolio — video direction, live streaming and on-site technical logistics for sports events.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -88,6 +89,8 @@
       align-items: center;
       justify-content: space-between;
       padding: 18px 6vw;
+      gap: 20px;
+      flex-wrap: wrap;
     }
 
     nav .name {
@@ -101,6 +104,13 @@
 
     nav .name span {
       color: var(--amber);
+    }
+
+    nav .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      flex-wrap: wrap;
     }
 
     nav ul {
@@ -120,6 +130,33 @@
     }
 
     nav a:hover {
+      color: var(--amber);
+    }
+
+    .lang-toggle {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cable-grey);
+      background: transparent;
+      border: 1px solid rgba(232, 163, 61, 0.35);
+      padding: 6px 11px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .lang-toggle:hover {
+      border-color: var(--amber);
+    }
+
+    .lang-toggle .sep {
+      opacity: 0.4;
+      margin: 0 5px;
+    }
+
+    .lang-toggle .on {
       color: var(--amber);
     }
 
@@ -189,6 +226,10 @@
 
     .section-head .eyebrow {
       color: var(--tape-red);
+    }
+
+    .about-section {
+      border-bottom: 1px solid rgba(26, 24, 16, 0.12);
     }
 
     .about-section p {
@@ -403,7 +444,7 @@
       border: 1px solid rgba(237, 231, 217, 0.15);
       position: relative;
     }
-    
+
     .gallery-item img {
       width: 100%;
       height: 100%;
@@ -491,6 +532,7 @@
         grid-template-columns: repeat(1, 1fr);
       }
     }
+
     .lightbox {
       display: none;
       position: fixed;
@@ -528,10 +570,12 @@
 
   <nav id="nav-root"></nav>
   <header class="hero" id="hero-root"></header>
+  <section class="section about-section" id="chi-sono">
+    <div class="section-head" id="about-head"></div>
+    <p id="about-text"></p>
+  </section>
   <section class="section" id="lavori">
-    <div class="section-head">
-      <h2>Progetti selezionati</h2><span class="eyebrow">Archivio produzioni</span>
-    </div>
+    <div class="section-head" id="grid-head"></div>
     <div class="grid" id="grid-root"></div>
   </section>
 
@@ -542,21 +586,24 @@
     /* ============================================================
        COME MODIFICARE QUESTA PAGINA — leggi qui prima di tutto
        ============================================================
-       Tutto quello che vedi sulla pagina (testi, progetti, immagini)
-       si trova nei due blocchi qui sotto: SITE_INFO e PROJECTS.
-       Non serve toccare altro codice nel file.
-    
+       Il sito è bilingue IT/EN con un toggle in alto a destra nel
+       menu. Ogni testo che cambia in base alla lingua è scritto
+       come { it: "...", en: "..." } invece di una semplice stringa.
+       I campi che NON cambiano con la lingua (percorsi immagine,
+       link video, id) restano stringhe semplici.
+
        1) TESTI GENERALI (nome, intro, chi sono, contatti)
-          -> modifica i valori dentro SITE_INFO.
-    
+          -> modifica i valori dentro SITE_INFO, sia it che en.
+
        2) AGGIUNGERE UN PROGETTO
           -> copia un intero blocco { ... } dentro l'array PROJECTS
              (per esempio copia quello di "evt-02", che è già pronto
              come modello), incollalo prima della parentesi quadra
-             finale "]" e cambia i valori con quelli del tuo evento.
+             finale "]" e cambia i valori con quelli del tuo evento,
+             sia in italiano che in inglese.
              Ogni progetto deve avere un "id" diverso dagli altri
-             (es: "evt-04"), usato come ancora del link nella griglia.
-    
+             (es: "evt-05"), usato come ancora del link nella griglia.
+
        3) AGGIUNGERE FOTO O VIDEO
           -> crea una cartella chiamata "images" nella stessa cartella
              dove si trova questo file .html, e mettici dentro le tue
@@ -568,157 +615,274 @@
           -> per i video del backstage o del risultato puoi anche
              incollare un link di YouTube o Vimeo al posto del file,
              verrà mostrato incorporato automaticamente.
-    
+
        4) RIMUOVERE UN PROGETTO
           -> cancella l'intero blocco { ... } corrispondente
              dall'array PROJECTS.
-    
+
+       5) LINGUA DI PARTENZA
+          -> di default la pagina si apre in italiano o inglese in
+             base alla lingua del browser di chi visita, poi ricorda
+             la scelta fatta col pulsante IT/EN. Per forzare sempre
+             una lingua di partenza, cambia il valore iniziale di
+             LANG qui sotto, nella costante DEFAULT_LANG.
+
        Non c'è altro da capire: il resto della pagina (menu, griglia,
        pagina di dettaglio di ogni progetto) si costruisce da solo
        leggendo questi dati.
        ============================================================ */
 
+    const DEFAULT_LANG = "auto"; // "it", "en", oppure "auto" (segue il browser)
+
     const SITE_INFO = {
       nome: "BALDI",
-      tagNav: "eventi",
+      tagNav: { it: "eventi", en: "events" },
       eyebrowHero: "Run of show",
-      titoloHero: "Le mie produzioni di eventi dal vivo",
-      testoHero: "",
-      chiSono: "Breve paragrafo su di te: da quanto tempo lavori su eventi dal vivo, che tipo di produzioni ti interessano, cosa stai cercando (stage, collaborazioni, primo lavoro). Sostituisci questo testo con la tua presentazione.",
+      titoloHero: { it: "Le mie produzioni di eventi dal vivo", en: "My live event productions" },
+      testoHero: {
+        it: "Regia, logistica tecnica e soluzioni rapide per eventi sportivi e dirette live, raccontate caso per caso.",
+        en: "Direction, technical logistics and fast fixes for sports events and live broadcasts — told case by case."
+      },
+      aboutEyebrow: { it: "Profilo", en: "Profile" },
+      aboutTitle: { it: "Chi sono", en: "About me" },
+      chiSono: {
+        it: "Studio Digital Management e da qualche anno lavoro sul campo nella produzione di eventi dal vivo: regia video, live streaming e logistica tecnica (audio, luci, ledwall). Mi piace risolvere problemi con soluzioni rapide, spesso autocostruite, sotto la pressione di un evento già in corso. Sto cercando un primo ruolo operativo in produzioni sportive o broadcast, per imparare da chi lo fa su scala internazionale.",
+        en: "I studied Digital Management and have spent the past few years on the ground producing live events: video direction, live streaming and on-site technical logistics (audio, lighting, LED walls). I like solving problems fast, often with gear I've rigged myself, under the pressure of an event that's already running. I'm looking for a first operational role in sports or broadcast production, to learn from people doing it at an international scale."
+      },
       email: "luca.baldissarutti@gmail.com",
-      socialLabel: "Instagram / Vimeo / LinkedIn",
+      socialLabel: { it: "Instagram / Vimeo / LinkedIn", en: "Instagram / Vimeo / LinkedIn" },
       socialLink: "#"
+    };
+
+    const UI = {
+      navLavori: { it: "Lavori", en: "Works" },
+      navChiSono: { it: "Chi sono", en: "About" },
+      gridTitle: { it: "Progetti selezionati", en: "Selected projects" },
+      gridEyebrow: { it: "Archivio produzioni", en: "Production archive" },
+      casoStudio: { it: "Caso studio", en: "Case study" },
+      lEvento: { it: "Evento", en: "Event" },
+      lRuolo: { it: "Ruolo", en: "Role" },
+      lBudget: { it: "Budget attrezzatura", en: "Equipment budget" },
+      num01: { it: "01 — Contesto", en: "01 — Context" },
+      hProblema: { it: "Il problema", en: "The problem" },
+      num02: { it: "02 — La sfida", en: "02 — The challenge" },
+      num03: { it: "03 — La soluzione", en: "03 — The solution" },
+      hSoluzione: { it: "Come l'ho realizzata", en: "How I built it" },
+      num04: { it: "04 — Dietro le quinte", en: "04 — Behind the scenes" },
+      hMontaggio: { it: "Il montaggio e i test", en: "Rigging and testing" },
+      num05: { it: "05 — Il risultato", en: "05 — The result" },
+      footerContatti: { it: "Contatti", en: "Contact" },
+      footerAltrove: { it: "Altrove", en: "Elsewhere" },
+      placeholderSchema: {
+        it: "Aggiungi qui uno schema, un disegno o una foto della soluzione tecnica (campo schemaImmagine)",
+        en: "Add a diagram, sketch or photo of the technical solution here (schemaImmagine field)"
+      },
+      placeholderResult: {
+        it: "Video o foto del risultato finale (campo risultatoMedia)",
+        en: "Video or photo of the final result (risultatoMedia field)"
+      },
+      placeholderCover: { it: "FOTO DI COPERTINA", en: "COVER PHOTO" }
     };
 
     const PROJECTS = [
       {
         id: "evt-01",
         tag: "EVT-01",
-        titolo: "Dolly Bike",
-        sottotitoloCard: "Meeting di atletica leggera",
-        descrizioneBreve: "Un'inquadratura dinamica per seguire l'azione con un rig autocostruito.",
+        titolo: { it: "Dolly Bike", en: "Bike Dolly" },
+        sottotitoloCard: { it: "Meeting di atletica leggera", en: "Track & field meeting" },
+        descrizioneBreve: {
+          it: "Un'inquadratura dinamica per seguire l'azione con un rig autocostruito.",
+          en: "A dynamic tracking shot built with a self-made rig."
+        },
         copertina: "img/dolly/copertina_dolly.png",
         callsheet: {
-          evento: "Meeting di atletica leggera",
-          ruolo: "Regia video, ripresa",
-          budget: "0€",
-          prep: "Prototipo e test"
+          evento: { it: "Meeting di atletica leggera", en: "Track & field meeting" },
+          ruolo: { it: "Regia video, ripresa", en: "Video direction, camera operation" },
+          budget: { it: "0€", en: "€0" },
+          prep: { it: "Prototipo e test", en: "Prototype & testing" }
         },
-        contesto: [
-          "Per un meeting di atletica leggera trasmesso in diretta streaming serviva un'inquadratura che seguisse i corridori lungo tutto il giro della pista, con un movimento fluido e stabile. Essendo un evento a budget zero, noleggiare un dolly professionale non era un'opzione. Allo stesso tempo, mi piaceva l'idea di affiancare alla telecamera fissa un'inquadratura dinamica che accompagnasse l'azione.",
-          "L'obiettivo era creare un sistema che si muovesse insieme agli atleti, seguendoli da vicino per tutta la gara.",
-          "L'idea era quella di avere qualcosa che si muovesse insieme all'azione e seguisse gli atletli da vicino."
-        ],
-        sfida: "Serviva una ripresa laterale, continua e stabile degli atleti, senza poter utilizzare un dolly. Inoltre, il mezzo doveva poter circolare sulla pista senza intralciare i corridori ed essere abbastanza semplice da guidare durante le riprese.",
-        soluzioneTesto: "Ho recuperato la city bike di mia mamma, che aveva già un portapacchi posteriore. Su quello ho costruito un supporto in legno progettato per ospitare e fissare il DJI Ronin sfruttando l'attacco a vite inferiore. Una volta montato, ho bloccato tutto con delle fascette per eliminare qualsiasi movimento indesiderato.<br><br>La fotocamera era collegata a un sistema Hollyland wireless che trasmetteva il segnale video direttamente alla regia. Per permettere al \"pilota\" di vedere l'inquadratura in tempo reale, ho montato sul manubrio un supporto con un iPad che mostrava il feed live della camera.",
+        contesto: {
+          it: [
+            "Per un meeting di atletica leggera trasmesso in diretta streaming serviva un'inquadratura che seguisse i corridori lungo tutto il giro della pista, con un movimento fluido e stabile. Essendo un evento a budget zero, noleggiare un dolly professionale non era un'opzione. Allo stesso tempo, mi piaceva l'idea di affiancare alla telecamera fissa un'inquadratura dinamica che accompagnasse l'azione.",
+            "L'obiettivo era creare un sistema che si muovesse insieme agli atleti, seguendoli da vicino per tutta la gara."
+          ],
+          en: [
+            "For a track & field meeting broadcast live online, I wanted a shot that would follow runners all the way around the track with smooth, stable movement. It was a zero-budget event, so renting a professional dolly wasn't an option. At the same time, I liked the idea of pairing the fixed camera with a dynamic shot that moved with the action.",
+            "The goal was to build a system that moved together with the athletes, following them closely for the whole race."
+          ]
+        },
+        sfida: {
+          it: "Serviva una ripresa laterale, continua e stabile degli atleti, senza poter utilizzare un dolly. Inoltre, il mezzo doveva poter circolare sulla pista senza intralciare i corridori ed essere abbastanza semplice da guidare durante le riprese.",
+          en: "I needed a continuous, stable side-on shot of the athletes without being able to use a dolly. The rig also had to move around the track without getting in the runners' way, and be simple enough to steer while filming."
+        },
+        soluzioneTesto: {
+          it: "Ho recuperato la city bike di mia mamma, che aveva già un portapacchi posteriore. Su quello ho costruito un supporto in legno progettato per ospitare e fissare il DJI Ronin sfruttando l'attacco a vite inferiore. Una volta montato, ho bloccato tutto con delle fascette per eliminare qualsiasi movimento indesiderato.<br><br>La fotocamera era collegata a un sistema Hollyland wireless che trasmetteva il segnale video direttamente alla regia. Per permettere al \"pilota\" di vedere l'inquadratura in tempo reale, ho montato sul manubrio un supporto con un iPad che mostrava il feed live della camera.",
+          en: "I borrowed my mum's city bike, which already had a rear rack. I built a wooden mount on it designed to hold a DJI Ronin, using its bottom screw mount. Once attached, I locked everything down with zip ties to remove any unwanted movement.<br><br>The camera was connected to a Hollyland wireless system that sent the video feed straight to the production desk. So the \"rider\" could see the shot in real time, I mounted a holder with an iPad on the handlebars, showing the camera's live feed."
+        },
         schemaTipo: "immagine",
         schemaImmagine: "img/dolly/dolly_progetto.png",
-        schemaDidascalia: "Schizzo tecnico del montaggio: stabilizzatore al portapacchi, iPad al manubrio.",
+        schemaDidascalia: {
+          it: "Schizzo tecnico del montaggio: stabilizzatore al portapacchi, iPad al manubrio.",
+          en: "Technical sketch of the build: stabilizer on the rear rack, iPad on the handlebars."
+        },
         backstage: [
-          { didascalia: "Fissaggio stabilizzatore", src: "img/dolly/dolly_1.png" },
-          { didascalia: "Fissaggio stabilizzatore", src: "img/dolly/dolly_3.png" },
-          { didascalia: "Test su pista", src: "img/dolly/dolly_2.png" }
+          { didascalia: { it: "Fissaggio stabilizzatore", en: "Mounting the stabilizer" }, src: "img/dolly/dolly_1.png" },
+          { didascalia: { it: "Fissaggio stabilizzatore", en: "Mounting the stabilizer" }, src: "img/dolly/dolly_3.png" },
+          { didascalia: { it: "Test su pista", en: "Track test" }, src: "img/dolly/dolly_2.png" }
         ],
-        risultatoTesto: "Il risultato è stato sorprendente: la fluidità e la stabilizzazione erano paragonabili a quelle di un dolly professionale, con un vantaggio in più. A differenza di un dolly tradizionale, che normalmente viene posizionato solo lungo i rettilinei, questa soluzione permetteva di coprire l'intero anello della pista, seguendo gli atleti senza interruzioni per tutta la gara.",
+        risultatoTesto: {
+          it: "Il risultato è stato sorprendente: la fluidità e la stabilizzazione erano paragonabili a quelle di un dolly professionale, con un vantaggio in più. A differenza di un dolly tradizionale, che normalmente viene posizionato solo lungo i rettilinei, questa soluzione permetteva di coprire l'intero anello della pista, seguendo gli atleti senza interruzioni per tutta la gara.",
+          en: "The result was surprising: the smoothness and stabilization were comparable to a professional dolly, with one extra advantage. Unlike a traditional dolly, usually placed only along the straights, this setup could cover the whole track, following the athletes without interruption for the entire race."
+        },
         risultatoMedia: "https://youtu.be/jrL0aFDr-MU?si=kYxOIEwtv5DWWIw7&t=14900"
       },
       {
         id: "evt-02",
         tag: "EVT-02",
-        titolo: "Diretta Spartan Race",
-        sottotitoloCard: "Gara in montagna",
-        descrizioneBreve: "Trasmissione live da un percorso nel bosco senza connessione internet.",
+        titolo: { it: "Diretta Spartan Race", en: "Spartan Race Live Broadcast" },
+        sottotitoloCard: { it: "Gara in montagna", en: "Mountain race" },
+        descrizioneBreve: {
+          it: "Trasmissione live da un percorso nel bosco senza connessione internet.",
+          en: "Streaming live from a forest course with no internet connection."
+        },
         copertina: "img/spartan/spartan_copertina.png",
         callsheet: {
-          evento: "Gara tipo Spartan Race",
-          ruolo: "Regia video",
-          budget: "Basso",
-          prep: "Setup sul percorso"
+          evento: { it: "Gara tipo Spartan Race", en: "Spartan-style mountain race" },
+          ruolo: { it: "Regia video", en: "Video direction" },
+          budget: { it: "Basso", en: "Low" },
+          prep: { it: "Setup sul percorso", en: "On-course setup" }
         },
-        contesto: [
-          "Si trattava di una gara ispirata alla Spartan Race, organizzata in una località di montagna completamente priva di copertura internet. L'obiettivo era trasmettere in diretta alcune prove distribuite lungo il percorso nel bosco sul ledwall presente nell'area di partenza, senza avere a disposizione attrezzature professionali."
-        ],
-        sfida: "La difficoltà principale era l'assenza totale di connessione dati, unita alla mancanza di budget per sistemi di trasmissione video professionali. Serviva quindi una soluzione affidabile, economica e facilmente trasportabile sul percorso di gara.",
-        soluzioneTesto: "Per risolvere il problema della connessione ho utilizzato uno Starlink alimentato da un generatore portatile da 1 kW. Per la trasmissione video, invece, ho impiegato diversi iPhone posizionati nei punti chiave del percorso, ciascuno collegato alla piattaforma web VDO.Ninja per inviare il proprio flusso video.<br><br>Tutti i segnali venivano poi raccolti in OBS, dove potevo gestire le diverse inquadrature e alternarle in tempo reale sul ledwall, mostrando al pubblico lo svolgimento delle prove direttamente dalla zona di partenza.",
+        contesto: {
+          it: [
+            "Si trattava di una gara ispirata alla Spartan Race, organizzata in una località di montagna completamente priva di copertura internet. L'obiettivo era trasmettere in diretta alcune prove distribuite lungo il percorso nel bosco sul ledwall presente nell'area di partenza, senza avere a disposizione attrezzature professionali."
+          ],
+          en: [
+            "The race was a Spartan Race-style event held in a mountain location with zero internet coverage. The goal was to broadcast live footage from several obstacles scattered through the forest course onto the LED wall at the start area, without any professional broadcast equipment."
+          ]
+        },
+        sfida: {
+          it: "La difficoltà principale era l'assenza totale di connessione dati, unita alla mancanza di budget per sistemi di trasmissione video professionali. Serviva quindi una soluzione affidabile, economica e facilmente trasportabile sul percorso di gara.",
+          en: "The main challenge was a total lack of data connectivity, combined with no budget for professional video transmission systems. I needed something reliable, cheap and easy to carry around the course."
+        },
+        soluzioneTesto: {
+          it: "Per risolvere il problema della connessione ho utilizzato uno Starlink alimentato da un generatore portatile da 1 kW. Per la trasmissione video, invece, ho impiegato diversi iPhone posizionati nei punti chiave del percorso, ciascuno collegato alla piattaforma web VDO.Ninja per inviare il proprio flusso video.<br><br>Tutti i segnali venivano poi raccolti in OBS, dove potevo gestire le diverse inquadrature e alternarle in tempo reale sul ledwall, mostrando al pubblico lo svolgimento delle prove direttamente dalla zona di partenza.",
+          en: "To solve the connectivity problem I used a Starlink unit powered by a 1kW portable generator. For video, I used several iPhones positioned at key points along the course, each connected to the VDO.Ninja web platform to send its own video feed.<br><br>All the feeds were then pulled into OBS, where I could switch between shots in real time and show the audience what was happening on the course, live from the start area."
+        },
         schemaTipo: "immagine",
         schemaImmagine: "img/spartan/spartan_progetto.jpeg",
         schemaDidascalia: "",
         backstage: [
-          { didascalia: "Setup iPhone", src: "img/spartan/spartan_1.png" },
-          { didascalia: "Setup iPhone", src: "img/spartan/spartan_2.png" },
-          { didascalia: "Regia con OBS", src: "img/spartan/spartan_3.png" },
-          { didascalia: "Regia con OBS", src: "img/spartan/spartan_4.png" },
-          { didascalia: "Regia con OBS", src: "img/spartan/spartan_5.png" },
-          { didascalia: "Regia con OBS", src: "img/spartan/spartan_6.png" },
-          { didascalia: "Regia con OBS", src: "img/spartan/spartan_7.png" },
-          { didascalia: "Regia con OBS", src: "img/spartan/spartan_8.png" }
+          { didascalia: { it: "Setup iPhone", en: "iPhone setup" }, src: "img/spartan/spartan_1.png" },
+          { didascalia: { it: "Setup iPhone", en: "iPhone setup" }, src: "img/spartan/spartan_2.png" },
+          { didascalia: { it: "Regia con OBS", en: "OBS control" }, src: "img/spartan/spartan_3.png" },
+          { didascalia: { it: "Regia con OBS", en: "OBS control" }, src: "img/spartan/spartan_4.png" },
+          { didascalia: { it: "Regia con OBS", en: "OBS control" }, src: "img/spartan/spartan_5.png" },
+          { didascalia: { it: "Regia con OBS", en: "OBS control" }, src: "img/spartan/spartan_6.png" },
+          { didascalia: { it: "Regia con OBS", en: "OBS control" }, src: "img/spartan/spartan_7.png" },
+          { didascalia: { it: "Regia con OBS", en: "OBS control" }, src: "img/spartan/spartan_8.png" }
         ],
-        risultatoTesto: "Il risultato è stato una diretta stabile e dall'aspetto professionale, capace di mostrare le prove sparse lungo il percorso come se fossero riprese da un sistema multicamera dedicato. Con una soluzione semplice e a basso costo è stato possibile offrire al pubblico un'esperienza molto più coinvolgente rispetto a una classica ripresa fissa.",
+        risultatoTesto: {
+          it: "Il risultato è stato una diretta stabile e dall'aspetto professionale, capace di mostrare le prove sparse lungo il percorso come se fossero riprese da un sistema multicamera dedicato. Con una soluzione semplice e a basso costo è stato possibile offrire al pubblico un'esperienza molto più coinvolgente rispetto a una classica ripresa fissa.",
+          en: "The result was a stable, professional-looking live broadcast that showed the obstacles scattered across the course as if shot by a dedicated multi-camera system. With a simple, low-cost setup, the audience got a far more engaging experience than a standard fixed-camera feed."
+        },
         risultatoMedia: "img/spartan/spartan_copertina.png"
       },
       {
         id: "evt-03",
         tag: "EVT-03",
-        titolo: "iPhone come webcam remote",
-        sottotitoloCard: "Meeting di atletica leggera",
-        descrizioneBreve: "Setup multicamera economico con iPhone per coprire tutte le gare.",
+        titolo: { it: "iPhone come webcam remote", en: "iPhones as Remote Webcams" },
+        sottotitoloCard: { it: "Meeting di atletica leggera", en: "Track & field meeting" },
+        descrizioneBreve: {
+          it: "Setup multicamera economico con iPhone per coprire tutte le gare.",
+          en: "A low-cost multi-camera setup using iPhones to cover every event."
+        },
         copertina: "img/diretta_cds/diretta_copertina.png",
         callsheet: {
-          evento: "Meeting di atletica leggera",
-          ruolo: "Regia video",
-          budget: "Basso",
-          prep: "Configurazione rete"
+          evento: { it: "Meeting di atletica leggera", en: "Track & field meeting" },
+          ruolo: { it: "Regia video", en: "Video direction" },
+          budget: { it: "Basso", en: "Low" },
+          prep: { it: "Configurazione rete", en: "Network setup" }
         },
-        contesto: [
-          "L'obiettivo era realizzare la diretta di un meeting di atletica leggera coprendo sia le gare su pista sia le diverse prove in campo, avendo a disposizione una sola telecamera con ottica zoom e alcuni iPhone."
-        ],
-        sfida: "Con una sola telecamera era impossibile seguire contemporaneamente le gare su pista, il salto in alto, il salto in lungo, il salto con l'asta e i lanci. Serviva quindi una soluzione che aumentasse il numero di punti di ripresa senza ricorrere ad attrezzature professionali.",
-        soluzioneTesto: "Ho creato una rete locale estesa a tutte le aree della pista e ho posizionato un iPhone in corrispondenza delle diverse prove. Utilizzando VDO.Ninja e la funzione Continuity Camera di Apple, ogni iPhone trasmetteva il proprio flusso video direttamente alla regia.<br><br>In OBS potevo gestire tutte le sorgenti contemporaneamente, alternando le inquadrature in base allo svolgimento delle gare e offrendo una copertura molto più completa dell'evento.",
+        contesto: {
+          it: [
+            "L'obiettivo era realizzare la diretta di un meeting di atletica leggera coprendo sia le gare su pista sia le diverse prove in campo, avendo a disposizione una sola telecamera con ottica zoom e alcuni iPhone."
+          ],
+          en: [
+            "The goal was to broadcast a track & field meeting covering both track races and the various field events, with only one zoom-lens camera and a handful of iPhones available."
+          ]
+        },
+        sfida: {
+          it: "Con una sola telecamera era impossibile seguire contemporaneamente le gare su pista, il salto in alto, il salto in lungo, il salto con l'asta e i lanci. Serviva quindi una soluzione che aumentasse il numero di punti di ripresa senza ricorrere ad attrezzature professionali.",
+          en: "With a single camera it was impossible to follow track races, high jump, long jump, pole vault and throwing events at the same time. I needed a way to add more camera angles without professional equipment."
+        },
+        soluzioneTesto: {
+          it: "Ho creato una rete locale estesa a tutte le aree della pista e ho posizionato un iPhone in corrispondenza delle diverse prove. Utilizzando VDO.Ninja e la funzione Continuity Camera di Apple, ogni iPhone trasmetteva il proprio flusso video direttamente alla regia.<br><br>In OBS potevo gestire tutte le sorgenti contemporaneamente, alternando le inquadrature in base allo svolgimento delle gare e offrendo una copertura molto più completa dell'evento.",
+          en: "I built a local network covering the whole track area and placed an iPhone at each field event. Using VDO.Ninja and Apple's Continuity Camera feature, each iPhone streamed its feed directly to the production desk.<br><br>In OBS I could manage every source at once, switching shots as the events unfolded and giving much fuller coverage of the meeting."
+        },
         schemaTipo: "immagine",
         schemaImmagine: "img/diretta_cds/diretta_progetto.png",
         schemaDidascalia: "",
         backstage: [
-          { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_1.png" },
-          { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_2.png" },
-          { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_3.png" },
-          { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_4.png" },
-          { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_5.png" },
-          { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_6.png" },
-          { didascalia: "Setup iPhone", src: "img/diretta_cds/diretta_7.png" }
-
+          { didascalia: { it: "Setup iPhone", en: "iPhone setup" }, src: "img/diretta_cds/diretta_1.png" },
+          { didascalia: { it: "Setup iPhone", en: "iPhone setup" }, src: "img/diretta_cds/diretta_2.png" },
+          { didascalia: { it: "Setup iPhone", en: "iPhone setup" }, src: "img/diretta_cds/diretta_3.png" },
+          { didascalia: { it: "Setup iPhone", en: "iPhone setup" }, src: "img/diretta_cds/diretta_4.png" },
+          { didascalia: { it: "Setup iPhone", en: "iPhone setup" }, src: "img/diretta_cds/diretta_5.png" },
+          { didascalia: { it: "Setup iPhone", en: "iPhone setup" }, src: "img/diretta_cds/diretta_6.png" },
+          { didascalia: { it: "Setup iPhone", en: "iPhone setup" }, src: "img/diretta_cds/diretta_7.png" }
         ],
-        risultatoTesto: "Oltre alla classica inquadratura panoramica con la telecamera zoom, sono riuscito ad aggiungere una serie di camere dedicate alle diverse discipline presenti sulla pista. Questo ha permesso di coprire anche i momenti in cui non erano in corso gare su pista, mostrando al pubblico le prove in campo senza interruzioni.<br><br>Uno dei principali vantaggi di questa soluzione è la flessibilità: gli iPhone possono essere spostati rapidamente ovunque sia disponibile la copertura della rete locale, adattando il setup alle esigenze di ogni evento.",
+        risultatoTesto: {
+          it: "Oltre alla classica inquadratura panoramica con la telecamera zoom, sono riuscito ad aggiungere una serie di camere dedicate alle diverse discipline presenti sulla pista. Questo ha permesso di coprire anche i momenti in cui non erano in corso gare su pista, mostrando al pubblico le prove in campo senza interruzioni.<br><br>Uno dei principali vantaggi di questa soluzione è la flessibilità: gli iPhone possono essere spostati rapidamente ovunque sia disponibile la copertura della rete locale, adattando il setup alle esigenze di ogni evento.",
+          en: "Alongside the usual wide shot from the zoom camera, I was able to add dedicated cameras for each discipline on the infield. This meant I could cover the moments when no track race was running, showing the field events to the audience without any gaps.<br><br>One of the biggest advantages of this setup is flexibility: the iPhones can be moved anywhere the local network reaches, adapting the setup to whatever each event needs."
+        },
         risultatoMedia: "https://www.youtube.com/live/pMplrXIDuHw?si=TrYu60nVBcrO_loz&t=6377"
       },
       {
         id: "evt-04",
         tag: "EVT-04",
-        titolo: "Grafiche diretta",
-        sottotitoloCard: "Meeting di atletica leggera",
-        descrizioneBreve: "Sistema per l'elaborazione e la messa in onda di grafiche broadcast in tempo reale.",
+        titolo: { it: "Grafiche diretta", en: "Live Broadcast Graphics" },
+        sottotitoloCard: { it: "Meeting di atletica leggera", en: "Track & field meeting" },
+        descrizioneBreve: {
+          it: "Sistema per l'elaborazione e la messa in onda di grafiche broadcast in tempo reale.",
+          en: "A system for building and pushing broadcast graphics live, in real time."
+        },
         copertina: "img/grafiche/grafica_copertina.png",
         callsheet: {
-          evento: "Meeting di atletica leggera",
-          ruolo: "Sviluppo tool, Regia",
-          budget: "Basso",
-          prep: "Sviluppo template HTML"
+          evento: { it: "Meeting di atletica leggera", en: "Track & field meeting" },
+          ruolo: { it: "Sviluppo tool, Regia", en: "Tool development, direction" },
+          budget: { it: "Basso", en: "Low" },
+          prep: { it: "Sviluppo template HTML", en: "HTML template development" }
         },
-        contesto: [
-          "Per la diretta streaming di un meeting di atletica leggera volevo trasmettere a schermo le starting list e i risultati delle varie gare con un look televisivo curato, del tutto simile a quello dei grandi eventi internazionali come Olimpiadi e Mondiali. I dati ufficiali erano pubblicati sul sito della FIDAL in una pagina aggiornata continuamente, ma non esisteva un sistema di esportazione diretta né un’integrazione automatica per i software di regia."
-        ],
-        sfida: "L’unico modo per estrarre le informazioni era copiare manualmente le tabelle dal sito. Il problema principale era la gestione del tempo in diretta: serviva un metodo immediato per elaborare quel testo grezzo, correggere al volo l'impaginazione e generare grafiche broadcast senza ritardare la messa in onda tra una serie e l'altra.",
-        soluzioneTesto: "Ho sviluppato un tool di regia dedicato che permette di organizzare il palinsesto dell'evento diviso per categorie, gare e serie (es. \"3000m F\", \"5000m Uomini\"). Il tool consente di incollare direttamente i dati della tabella FIDAL, formattarli istantaneamente con un'anteprima in tempo reale.<br><br>Sul fronte grafico ho creato un template HTML personalizzato caricato dentro OBS tramite sorgente browser. Attraverso l'interfaccia dell'applicazione potevo così controllare i comandi di regia (\"Aggiorna Dati\", \"Manda in Onda\", \"Togli Grafica\") per trasmettere istantaneamente le starting list aggiornate prima di ogni gara.",
+        contesto: {
+          it: [
+            "Per la diretta streaming di un meeting di atletica leggera volevo trasmettere a schermo le starting list e i risultati delle varie gare con un look televisivo curato, del tutto simile a quello dei grandi eventi internazionali come Olimpiadi e Mondiali. I dati ufficiali erano pubblicati sul sito della FIDAL in una pagina aggiornata continuamente, ma non esisteva un sistema di esportazione diretta né un'integrazione automatica per i software di regia."
+          ],
+          en: [
+            "For the live stream of a track & field meeting, I wanted to show start lists and results on screen with a polished broadcast look, similar to what you'd see at the Olympics or World Championships. The official data was published on the FIDAL (Italian Athletics Federation) website on a continuously updated page, but there was no export feature or direct integration with production software."
+          ]
+        },
+        sfida: {
+          it: "L'unico modo per estrarre le informazioni era copiare manualmente le tabelle dal sito. Il problema principale era la gestione del tempo in diretta: serviva un metodo immediato per elaborare quel testo grezzo, correggere al volo l'impaginazione e generare grafiche broadcast senza ritardare la messa in onda tra una serie e l'altra.",
+          en: "The only way to get the data out was to copy the tables from the website by hand. The main problem was managing time during the live broadcast: I needed a fast way to process that raw text, fix the formatting on the fly, and generate broadcast graphics without delaying the show between heats."
+        },
+        soluzioneTesto: {
+          it: "Ho sviluppato un tool di regia dedicato che permette di organizzare il palinsesto dell'evento diviso per categorie, gare e serie (es. \"3000m F\", \"5000m Uomini\"). Il tool consente di incollare direttamente i dati della tabella FIDAL, formattarli istantaneamente con un'anteprima in tempo reale.<br><br>Sul fronte grafico ho creato un template HTML personalizzato caricato dentro OBS tramite sorgente browser. Attraverso l'interfaccia dell'applicazione potevo così controllare i comandi di regia (\"Aggiorna Dati\", \"Manda in Onda\", \"Togli Grafica\") per trasmettere istantaneamente le starting list aggiornate prima di ogni gara.",
+          en: "I built a dedicated production tool that organizes the event schedule by category, race and heat (e.g. \"3000m W\", \"5000m Men\"). The tool lets me paste the FIDAL data table directly and format it instantly, with a live preview.<br><br>On the graphics side, I created a custom HTML template loaded into OBS as a browser source. From the app's interface I could then control the on-air commands (\"Update Data\", \"Go Live\", \"Clear Graphic\") to push updated start lists to air right before each race."
+        },
         schemaTipo: "immagine",
         schemaImmagine: "img/grafiche/grafica_progetto.png",
         schemaDidascalia: "",
         backstage: [
-          { didascalia: "Grafica", src: "img/grafiche/grafica_1.png" },
-          { didascalia: "Grafica", src: "img/grafiche/grafica_2.png" },
-          { didascalia: "Grafica", src: "img/grafiche/grafica_3.png" },
-          { didascalia: "Grafica", src: "img/grafiche/grafica_4.png" },
-          { didascalia: "Grafica copertina", src: "img/grafiche/grafica_copertina.png" }
+          { didascalia: { it: "Grafica", en: "Graphic" }, src: "img/grafiche/grafica_1.png" },
+          { didascalia: { it: "Grafica", en: "Graphic" }, src: "img/grafiche/grafica_2.png" },
+          { didascalia: { it: "Grafica", en: "Graphic" }, src: "img/grafiche/grafica_3.png" },
+          { didascalia: { it: "Grafica", en: "Graphic" }, src: "img/grafiche/grafica_4.png" },
+          { didascalia: { it: "Grafica copertina", en: "Cover graphic" }, src: "img/grafiche/grafica_copertina.png" }
         ],
-        risultatoTesto: "Il risultato finale è stato un overlay grafico estremamente pulito e dall'aspetto professionale, del tutto paragonabile alle grafiche ufficiali dei Mondiali o delle Olimpiadi.",
+        risultatoTesto: {
+          it: "Il risultato finale è stato un overlay grafico estremamente pulito e dall'aspetto professionale, del tutto paragonabile alle grafiche ufficiali dei Mondiali o delle Olimpiadi.",
+          en: "The end result was an extremely clean, professional-looking graphics overlay, fully comparable to the official broadcast graphics used at World Championships or the Olympics."
+        },
         risultatoMedia: "img/grafiche/grafica_copertina.png"
       }
     ];
@@ -728,7 +892,29 @@
        costruisce la pagina. Non serve modificarlo.
        ============================================================ */
 
-    function mediaEmbed(src, aspectClassEl) {
+    let LANG = (function () {
+      const saved = localStorage.getItem("portfolio-lang");
+      if (saved === "it" || saved === "en") return saved;
+      if (DEFAULT_LANG === "it" || DEFAULT_LANG === "en") return DEFAULT_LANG;
+      return (navigator.language || "").toLowerCase().startsWith("it") ? "it" : "en";
+    })();
+
+    function t(field) {
+      if (field == null) return "";
+      if (typeof field === "string") return field;
+      if (Array.isArray(field)) return field;
+      return field[LANG] ?? field.it ?? field.en ?? "";
+    }
+
+    function setLang(lang) {
+      LANG = lang;
+      localStorage.setItem("portfolio-lang", lang);
+      document.documentElement.lang = lang;
+      renderAll();
+      window.scrollTo({ top: window.scrollY }); // keep position
+    }
+
+    function mediaEmbed(src) {
       if (!src) return null;
       const isYoutube = /youtube\.com|youtu\.be/.test(src);
       const isVimeo = /vimeo\.com/.test(src);
@@ -757,121 +943,107 @@
 
     function renderNav() {
       document.getElementById("nav-root").innerHTML = `
-    <div class="name">${SITE_INFO.nome} <span>/ ${SITE_INFO.tagNav}</span></div>
-    <ul>
-      <li><a href="#lavori">Lavori</a></li>
-
-    </ul>`;
+    <div class="name">${SITE_INFO.nome} <span>/ ${t(SITE_INFO.tagNav)}</span></div>
+    <div class="nav-right">
+      <ul>
+        <li><a href="#chi-sono">${t(UI.navChiSono)}</a></li>
+        <li><a href="#lavori">${t(UI.navLavori)}</a></li>
+      </ul>
+      <button class="lang-toggle" id="lang-toggle-btn" aria-label="Switch language / Cambia lingua">
+        <span class="${LANG === 'it' ? 'on' : ''}">IT</span><span class="sep">/</span><span class="${LANG === 'en' ? 'on' : ''}">EN</span>
+      </button>
+    </div>`;
+      document.getElementById("lang-toggle-btn").addEventListener("click", () => setLang(LANG === "it" ? "en" : "it"));
     }
 
     function renderHero() {
-      const chips = PROJECTS.map(p => `<a class="tag-chip" href="#${p.id}">${p.tag} — ${p.titolo}</a>`).join("");
+      const chips = PROJECTS.map(p => `<a class="tag-chip" href="#${p.id}">${p.tag} — ${t(p.titolo)}</a>`).join("");
       document.getElementById("hero-root").innerHTML = `
     <span class="eyebrow">${SITE_INFO.eyebrowHero}</span>
-    <h1>${SITE_INFO.titoloHero}</h1>
-    <p>${SITE_INFO.testoHero}</p>
+    <h1>${t(SITE_INFO.titoloHero)}</h1>
+    <p>${t(SITE_INFO.testoHero)}</p>
     <div class="tag-row">${chips}</div>`;
+    }
+
+    function renderAbout() {
+      document.getElementById("about-head").innerHTML = `
+    <h2>${t(SITE_INFO.aboutTitle)}</h2><span class="eyebrow">${t(SITE_INFO.aboutEyebrow)}</span>`;
+      document.getElementById("about-text").textContent = t(SITE_INFO.chiSono);
+    }
+
+    function renderGridHead() {
+      document.getElementById("grid-head").innerHTML = `
+    <h2>${t(UI.gridTitle)}</h2><span class="eyebrow">${t(UI.gridEyebrow)}</span>`;
     }
 
     function renderGrid() {
       document.getElementById("grid-root").innerHTML = PROJECTS.map(p => `
     <a class="card" href="#${p.id}">
-      <div class="thumb">${p.copertina ? `<img src="${p.copertina}" alt="${p.titolo}">` : `FOTO DI COPERTINA<br>${p.titolo}`}</div>
+      <div class="thumb">${p.copertina ? `<img src="${p.copertina}" alt="${t(p.titolo)}">` : `${t(UI.placeholderCover)}<br>${t(p.titolo)}`}</div>
       <div class="body">
-        <div class="meta">${p.tag} · ${p.sottotitoloCard}</div>
-        <h3>${p.titolo}</h3>
-        <p>${p.descrizioneBreve}</p>
+        <div class="meta">${p.tag} · ${t(p.sottotitoloCard)}</div>
+        <h3>${t(p.titolo)}</h3>
+        <p>${t(p.descrizioneBreve)}</p>
       </div>
     </a>`).join("");
     }
 
-    function schematicSvgEvt01() {
-      return `
-    <svg viewBox="0 0 900 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schema tecnico del rig: bicicletta con stabilizzatore e fotocamera">
-      <title>Schema del rig bici-dolly</title>
-      <desc>Disegno tecnico che mostra una bicicletta con uno stabilizzatore fissato al manubrio, una fotocamera montata sopra, e le annotazioni delle parti principali.</desc>
-      <g fill="none" stroke="#DCE6ED" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.92">
-        <circle cx="230" cy="330" r="70"/><circle cx="590" cy="330" r="70"/>
-        <circle cx="230" cy="330" r="6" fill="#DCE6ED" stroke="none"/><circle cx="590" cy="330" r="6" fill="#DCE6ED" stroke="none"/>
-        <path d="M230 330 L 400 200 L 590 330"/><path d="M400 200 L 400 130"/><path d="M230 330 L 470 330"/>
-        <path d="M400 130 L 470 200 L 590 330"/><path d="M400 130 L 340 130"/><path d="M340 100 L 340 160"/>
-      </g>
-      <g stroke="#E8A33D" stroke-width="2.4" fill="none" stroke-linecap="round">
-        <rect x="300" y="70" width="88" height="34" rx="2" transform="rotate(-8 344 87)"/>
-        <line x1="335" y1="100" x2="325" y2="130" transform="rotate(-8 330 115)"/>
-      </g>
-      <g fill="none" stroke="#E8A33D" stroke-width="2.2"><rect x="318" y="30" width="54" height="34" rx="3"/><circle cx="345" cy="47" r="11"/></g>
-      <line x1="345" y1="64" x2="340" y2="88" stroke="#E8A33D" stroke-width="2.2"/>
-      <g font-family="IBM Plex Mono, monospace" font-size="12" fill="#DCE6ED">
-        <line x1="345" y1="47" x2="470" y2="47" stroke="#DCE6ED" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/><text x="478" y="51">Fotocamera</text>
-        <line x1="335" y1="105" x2="470" y2="105" stroke="#DCE6ED" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/><text x="478" y="109">Stabilizzatore, fissato al manubrio</text>
-        <line x1="400" y1="130" x2="470" y2="160" stroke="#DCE6ED" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/><text x="478" y="164">Telaio bicicletta</text>
-        <line x1="410" y1="265" x2="470" y2="230" stroke="#DCE6ED" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/><text x="478" y="234">Traiettoria lungo l'anello pista</text>
-      </g>
-      <g font-family="IBM Plex Mono, monospace" font-size="11" fill="#8FA6B8" opacity="0.8">
-        <text x="60" y="420">Vista laterale — non in scala</text><text x="740" y="420" text-anchor="end">Rig EVT-01</text>
-      </g>
-    </svg>`;
-    }
-
     function renderSchematic(p) {
-      if (p.schemaTipo === "disegno-evt01") return schematicSvgEvt01();
       if (p.schemaImmagine) return `<img src="${p.schemaImmagine}" alt="" onclick="openLightbox('${p.schemaImmagine}')">`;
-      return `<div class="placeholder" style="aspect-ratio:16/9;">Aggiungi qui uno schema, un disegno o una foto della soluzione tecnica (campo schemaImmagine)</div>`;
+      return `<div class="placeholder" style="aspect-ratio:16/9;">${t(UI.placeholderSchema)}</div>`;
     }
 
     function renderCaseStudies() {
       document.getElementById("case-studies-root").innerHTML = PROJECTS.map(p => `
     <article class="case-study" id="${p.id}">
       <div class="case-header">
-        <span class="eyebrow">Caso studio · ${p.tag}</span>
-        <h2>${p.titolo}</h2>
+        <span class="eyebrow">${t(UI.casoStudio)} · ${p.tag}</span>
+        <h2>${t(p.titolo)}</h2>
         ${p.copertina ? `<div style="margin-bottom: 40px; border: 1px solid rgba(237, 231, 217, 0.15);"><img src="${p.copertina}" style="width: 100%; height: auto; display: block;" alt=""></div>` : ""}
         <div class="callsheet">
-          <div><span>Evento</span><strong>${p.callsheet.evento}</strong></div>
-          <div><span>Ruolo</span><strong>${p.callsheet.ruolo}</strong></div>
-          <div><span>Budget attrezzatura</span><strong>${p.callsheet.budget}</strong></div>
-
+          <div><span>${t(UI.lEvento)}</span><strong>${t(p.callsheet.evento)}</strong></div>
+          <div><span>${t(UI.lRuolo)}</span><strong>${t(p.callsheet.ruolo)}</strong></div>
+          <div><span>${t(UI.lBudget)}</span><strong>${t(p.callsheet.budget)}</strong></div>
         </div>
       </div>
 
       <div class="cs-block">
-        <span class="num">01 — Contesto</span>
-        <h3>Il problema</h3>
-        ${p.contesto.map(par => `<p>${par}</p>`).join("")}
+        <span class="num">${t(UI.num01)}</span>
+        <h3>${t(UI.hProblema)}</h3>
+        ${t(p.contesto).map(par => `<p>${par}</p>`).join("")}
       </div>
 
       <div class="cs-block">
-        <span class="num">02 — La sfida</span>
-        <div class="pull"><p>${p.sfida}</p></div>
+        <span class="num">${t(UI.num02)}</span>
+        <div class="pull"><p>${t(p.sfida)}</p></div>
       </div>
 
       <div class="cs-block">
-        <span class="num">03 — La soluzione</span>
-        <h3>Come l'ho realizzata</h3>
-        <p>${p.soluzioneTesto}</p>
+        <span class="num">${t(UI.num03)}</span>
+        <h3>${t(UI.hSoluzione)}</h3>
+        <p>${t(p.soluzioneTesto)}</p>
         <div class="schematic-wrap">
           ${renderSchematic(p)}
-          <div class="schematic-caption">${p.schemaDidascalia}</div>
+          <div class="schematic-caption">${t(p.schemaDidascalia)}</div>
         </div>
       </div>
 
       <div class="cs-block">
-        <span class="num">04 — Dietro le quinte</span>
-        <h3>Il montaggio e i test</h3>
+        <span class="num">${t(UI.num04)}</span>
+        <h3>${t(UI.hMontaggio)}</h3>
         <div class="gallery">
           ${p.backstage.map(b => b.src
         ? `<div class="gallery-item">${mediaEmbed(b.src)}</div>`
-        : `<div class="placeholder">${b.didascalia}</div>`
+        : `<div class="placeholder">${t(b.didascalia)}</div>`
       ).join("")}
         </div>
       </div>
 
       <div class="result-strip">
-        <div class="media-box">${p.risultatoMedia ? mediaEmbed(p.risultatoMedia) : `<div class="placeholder video" style="aspect-ratio:16/9; width:100%; height:100%;">Video o foto del risultato finale (campo risultatoMedia)</div>`}</div>
+        <div class="media-box">${p.risultatoMedia ? mediaEmbed(p.risultatoMedia) : `<div class="placeholder video" style="aspect-ratio:16/9; width:100%; height:100%;">${t(UI.placeholderResult)}</div>`}</div>
         <div class="result-text">
-          <span class="num">05 — Il risultato</span>
-          <p>${p.risultatoTesto}</p>
+          <span class="num">${t(UI.num05)}</span>
+          <p>${t(p.risultatoTesto)}</p>
         </div>
       </div>
     </article>`).join("");
@@ -879,15 +1051,22 @@
 
     function renderFooter() {
       document.getElementById("footer-root").innerHTML = `
-    <div><span class="eyebrow">Contatti</span><a href="mailto:${SITE_INFO.email}">${SITE_INFO.email}</a></div>
-    <div><span class="eyebrow">Altrove</span><a href="${SITE_INFO.socialLink}">${SITE_INFO.socialLabel}</a></div>`;
+    <div><span class="eyebrow">${t(UI.footerContatti)}</span><a href="mailto:${SITE_INFO.email}">${SITE_INFO.email}</a></div>
+    <div><span class="eyebrow">${t(UI.footerAltrove)}</span><a href="${SITE_INFO.socialLink}">${t(SITE_INFO.socialLabel)}</a></div>`;
     }
 
-    renderNav();
-    renderHero();
-    renderGrid();
-    renderCaseStudies();
-    renderFooter();
+    function renderAll() {
+      renderNav();
+      renderHero();
+      renderAbout();
+      renderGridHead();
+      renderGrid();
+      renderCaseStudies();
+      renderFooter();
+    }
+
+    document.documentElement.lang = LANG;
+    renderAll();
 
     function openLightbox(src) {
       document.getElementById('lightbox-img').src = src;
